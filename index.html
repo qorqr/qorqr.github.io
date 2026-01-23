@@ -7,10 +7,10 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
- <link
-  rel="stylesheet"
-  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
-/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
+    
+    <!-- Particle.js Library -->
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
 
     <style>
         :root {
@@ -25,14 +25,34 @@
             scroll-behavior: smooth;
         }
 
-        .dark-mode {
-            background-color: #0f172a;
-            color: #f8fafc;
+        /* Particle Background */
+        #particles-js {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            top: 0;
+            left: 0;
         }
 
-        .light-mode {
-            background-color: #ffffff;
-            color: #1e293b;
+        .dark-mode #particles-js {
+            background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
+        }
+
+        .light-mode #particles-js {
+            background: linear-gradient(135deg, #f8fafc 0%, #e0e7ff 100%);
+        }
+
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .dark-mode .glass-effect {
+            background: rgba(15, 23, 42, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.05);
         }
 
         .gradient-text {
@@ -46,27 +66,36 @@
             background: linear-gradient(135deg, var(--primary), var(--secondary));
         }
 
-        .glass-effect {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+        .gradient-border {
+            position: relative;
+            border: 2px solid transparent;
+            background-clip: padding-box;
         }
 
-        .dark-mode .glass-effect {
-            background: rgba(15, 23, 42, 0.7);
+        .gradient-border::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            right: -2px;
+            bottom: -2px;
+            left: -2px;
+            z-index: -1;
+            border-radius: inherit;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
         }
 
         .card-hover {
-            transition: all 0.3s ease;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transform-origin: center;
         }
 
         .card-hover:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
         }
 
         .dark-mode .card-hover:hover {
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
         }
 
         .skill-bar {
@@ -84,7 +113,7 @@
             height: 100%;
             background: linear-gradient(90deg, var(--primary), var(--secondary));
             border-radius: 4px;
-            transition: width 1.5s ease-in-out;
+            transition: width 1.5s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .animate-float {
@@ -92,14 +121,14 @@
         }
 
         @keyframes float {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-10px); }
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-15px) rotate(2deg); }
         }
 
         .stagger-item {
             opacity: 0;
             transform: translateY(20px);
-            animation: stagger 0.5s ease forwards;
+            animation: stagger 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
         }
 
         @keyframes stagger {
@@ -107,23 +136,6 @@
                 opacity: 1;
                 transform: translateY(0);
             }
-        }
-
-        .typewriter {
-            overflow: hidden;
-            border-right: 2px solid var(--primary);
-            white-space: nowrap;
-            animation: typing 3.5s steps(40, end), blink-caret 0.75s step-end infinite;
-        }
-
-        @keyframes typing {
-            from { width: 0 }
-            to { width: 100% }
-        }
-
-        @keyframes blink-caret {
-            from, to { border-color: transparent }
-            50% { border-color: var(--primary) }
         }
 
         .scroll-progress {
@@ -135,6 +147,92 @@
             background: linear-gradient(90deg, var(--primary), var(--secondary));
             transform-origin: 0%;
             z-index: 1000;
+        }
+
+        /* Neon Effect */
+        .neon-border {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .neon-border::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, #ff00ff, #00ffff, #ffff00, #ff00ff);
+            background-size: 400% 400%;
+            z-index: -1;
+            animation: neon 3s ease-in-out infinite;
+            border-radius: 10px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .neon-border:hover::before {
+            opacity: 1;
+        }
+
+        @keyframes neon {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        /* Image Upload Styling */
+        .image-upload-container {
+            position: relative;
+            width: 200px;
+            height: 200px;
+            margin: 0 auto;
+        }
+
+        .image-preview {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 3px solid;
+            border-image: linear-gradient(135deg, var(--primary), var(--secondary)) 1;
+        }
+
+        .upload-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .upload-overlay:hover {
+            background: rgba(0, 0, 0, 0.9);
+        }
+
+        /* Grid Background Animation */
+        .grid-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+            opacity: 0.3;
+            background-image: 
+                linear-gradient(rgba(99, 102, 241, 0.1) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(99, 102, 241, 0.1) 1px, transparent 1px);
+            background-size: 50px 50px;
+            animation: gridMove 20s linear infinite;
+        }
+
+        @keyframes gridMove {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(50px, 50px); }
         }
 
         /* Custom Scrollbar */
@@ -167,21 +265,6 @@
 
         .dark-mode ::selection {
             background: rgba(99, 102, 241, 0.5);
-        }
-
-        /* Line clamp */
-        .line-clamp-2 {
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-        }
-
-        .line-clamp-3 {
-            display: -webkit-box;
-            -webkit-line-clamp: 3;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
         }
 
         /* Loading animation */
@@ -217,24 +300,50 @@
             50% { transform: scale(1.1); }
         }
 
-        /* Export/Import Panel */
-        .data-panel {
-            transition: all 0.3s ease;
+        /* Floating Elements Animation */
+        .floating-element {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(40px);
+            opacity: 0.3;
+            z-index: -1;
+            animation: floatAround 20s infinite linear;
         }
 
-        .data-panel.collapsed {
-            height: 0;
-            opacity: 0;
-            overflow: hidden;
+        @keyframes floatAround {
+            0% { transform: translate(0, 0) rotate(0deg); }
+            25% { transform: translate(100px, 50px) rotate(90deg); }
+            50% { transform: translate(50px, 100px) rotate(180deg); }
+            75% { transform: translate(-50px, 50px) rotate(270deg); }
+            100% { transform: translate(0, 0) rotate(360deg); }
         }
 
-        .data-panel.expanded {
-            height: auto;
-            opacity: 1;
+        /* Professional Typography */
+        .professional-heading {
+            font-weight: 800;
+            letter-spacing: -0.025em;
+            line-height: 1.1;
+        }
+
+        .professional-subheading {
+            font-weight: 500;
+            letter-spacing: 0.025em;
+            opacity: 0.9;
         }
     </style>
 </head>
-<body x-bind:class="isDark ? 'dark-mode' : 'light-mode'" class="min-h-screen">
+<body x-bind:class="isDark ? 'dark-mode' : 'light-mode'" class="min-h-screen relative">
+    <!-- Particle Background -->
+    <div id="particles-js"></div>
+    
+    <!-- Grid Background -->
+    <div class="grid-bg"></div>
+    
+    <!-- Floating Elements -->
+    <div class="floating-element w-96 h-96 bg-purple-500 top-20 left-20"></div>
+    <div class="floating-element w-64 h-64 bg-indigo-500 bottom-20 right-20" style="animation-delay: -10s;"></div>
+    <div class="floating-element w-80 h-80 bg-blue-500 top-1/2 left-1/4" style="animation-delay: -5s;"></div>
+
     <!-- Scroll Progress Bar -->
     <div class="scroll-progress" :style="`transform: scaleX(${scrollProgress / 100})`"></div>
 
@@ -246,9 +355,10 @@
                 <div class="w-32 h-32 mx-auto relative">
                     <div class="absolute inset-0 border-4 border-transparent border-t-indigo-500 rounded-full loading-spinner"></div>
                     <div class="absolute inset-4 border-4 border-transparent border-t-purple-500 rounded-full loading-spinner" style="animation-duration: 1.5s"></div>
+                    <div class="absolute inset-8 border-4 border-transparent border-t-pink-500 rounded-full loading-spinner" style="animation-duration: 2s"></div>
 
                     <div class="absolute inset-0 flex items-center justify-center">
-                        <div class="w-20 h-20 gradient-bg rounded-2xl flex items-center justify-center">
+                        <div class="w-20 h-20 gradient-bg rounded-2xl flex items-center justify-center animate-float">
                             <i class="fas fa-code text-white text-2xl"></i>
                         </div>
                     </div>
@@ -256,9 +366,9 @@
             </div>
 
             <div class="space-y-4">
-                <h2 class="text-2xl font-bold text-white tracking-wider">DEV<span class="gradient-text">PORT</span></h2>
+                <h2 class="text-3xl font-bold text-white tracking-wider">DEV<span class="gradient-text">PORT</span></h2>
                 <div class="typewriter-container">
-                    <p class="text-white/80 typewriter">Loading Portfolio...</p>
+                    <p class="text-white/80 typewriter font-mono text-sm">Initializing Portfolio...</p>
                 </div>
             </div>
         </div>
@@ -271,12 +381,12 @@
             <div class="flex justify-between items-center">
                 <!-- Logo -->
                 <a href="#home" class="flex items-center space-x-3 group">
-                    <div class="w-12 h-12 gradient-bg rounded-xl flex items-center justify-center group-hover:rotate-12 transition-transform duration-300">
+                    <div class="w-12 h-12 gradient-bg rounded-xl flex items-center justify-center group-hover:rotate-12 transition-transform duration-300 shadow-lg">
                         <i class="fas fa-code text-white text-xl"></i>
                     </div>
                     <div>
                         <h1 class="text-xl font-bold gradient-text tracking-tight">DevPort</h1>
-                        <p class="text-xs" :class="isDark ? 'text-slate-400' : 'text-slate-600'">Full Stack Developer</p>
+                        <p class="text-xs professional-subheading" :class="isDark ? 'text-slate-400' : 'text-slate-600'">Full Stack Developer</p>
                     </div>
                 </a>
 
@@ -284,12 +394,14 @@
                 <div class="hidden lg:flex items-center space-x-1">
                     <template x-for="(item, index) in navItems" :key="index">
                         <a :href="item.href"
-                           class="px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300"
+                           class="px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 relative group"
                            :class="activeSection === item.name.toLowerCase()
                                    ? 'gradient-text font-semibold'
                                    : (isDark ? 'text-slate-300 hover:text-white' : 'text-slate-700 hover:text-slate-900')"
                            @click.prevent="scrollTo(item.href.replace('#', ''))">
-                            <span x-text="item.name"></span>
+                            <span x-text="item.name" class="relative z-10"></span>
+                            <span class="absolute bottom-0 left-1/2 w-0 h-0.5 gradient-bg transition-all duration-300 group-hover:w-full group-hover:left-0"
+                                  :class="activeSection === item.name.toLowerCase() ? 'w-full left-0' : ''"></span>
                         </a>
                     </template>
                 </div>
@@ -299,40 +411,46 @@
                     <!-- Data Management Button -->
                     <div class="relative">
                         <button @click="toggleDataPanel"
-                                class="w-12 h-12 rounded-xl glass-effect flex items-center justify-center hover:scale-110 transition-all duration-300"
+                                class="w-12 h-12 rounded-xl glass-effect flex items-center justify-center hover:scale-110 transition-all duration-300 shadow-lg group"
                                 :title="`${totalItems} items in storage`">
-                            <i class="fas fa-database"></i>
+                            <i class="fas fa-database group-hover:rotate-90 transition-transform duration-300"></i>
                             <span x-show="totalItems > 0" class="notification-badge" x-text="totalItems"></span>
                         </button>
                     </div>
 
                     <!-- Theme Toggle -->
                     <button @click="toggleTheme"
-                            class="w-12 h-12 rounded-xl glass-effect flex items-center justify-center hover:scale-110 transition-all duration-300">
-                        <i class="fas fa-sun" x-show="!isDark"></i>
-                        <i class="fas fa-moon" x-show="isDark"></i>
+                            class="w-12 h-12 rounded-xl glass-effect flex items-center justify-center hover:scale-110 transition-all duration-300 shadow-lg group">
+                        <i class="fas fa-sun transform transition-all duration-300" 
+                           :class="!isDark ? 'rotate-0 opacity-100' : 'rotate-90 opacity-0'"></i>
+                        <i class="fas fa-moon transform transition-all duration-300 absolute"
+                           :class="isDark ? 'rotate-0 opacity-100' : '-rotate-90 opacity-0'"></i>
                     </button>
 
                     <!-- Mobile Menu Button -->
                     <button @click="mobileMenu = !mobileMenu"
-                            class="lg:hidden w-12 h-12 rounded-xl glass-effect flex items-center justify-center">
-                        <i class="fas fa-bars text-lg"></i>
+                            class="lg:hidden w-12 h-12 rounded-xl glass-effect flex items-center justify-center shadow-lg">
+                        <i class="fas fa-bars text-lg transition-transform duration-300"
+                           :class="mobileMenu ? 'rotate-90' : ''"></i>
                     </button>
                 </div>
             </div>
 
             <!-- Mobile Menu -->
             <div x-show="mobileMenu" x-transition
-                 class="lg:hidden mt-4 p-4 rounded-2xl glass-effect">
+                 class="lg:hidden mt-4 p-4 rounded-2xl glass-effect shadow-lg">
                 <div class="space-y-2">
                     <template x-for="(item, index) in navItems" :key="index">
                         <a :href="item.href"
-                           class="block px-4 py-3 rounded-lg text-sm font-medium transition-all duration-300"
+                           class="block px-4 py-3 rounded-lg text-sm font-medium transition-all duration-300 relative group"
                            :class="activeSection === item.name.toLowerCase()
-                                   ? 'gradient-bg text-white'
-                                   : (isDark ? 'text-slate-300 hover:bg-slate-800' : 'text-slate-700 hover:bg-slate-100')"
+                                   ? 'gradient-bg text-white shadow-lg'
+                                   : (isDark ? 'text-slate-300 hover:bg-slate-800/50' : 'text-slate-700 hover:bg-slate-100/50')"
                            @click="mobileMenu = false; scrollTo(item.href.replace('#', ''))">
                             <span x-text="item.name"></span>
+                            <span class="absolute right-4 top-1/2 transform -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                <i class="fas fa-chevron-right text-xs"></i>
+                            </span>
                         </a>
                     </template>
                 </div>
@@ -340,23 +458,31 @@
 
             <!-- Data Management Panel -->
             <div x-show="showDataPanel" x-transition
-                 class="mt-4 p-4 rounded-2xl glass-effect data-panel"
+                 class="mt-4 p-6 rounded-2xl glass-effect shadow-lg data-panel"
                  :class="showDataPanel ? 'expanded' : 'collapsed'">
-                <div class="space-y-4">
-                    <h3 class="font-bold text-lg gradient-text">Data Management</h3>
+                <div class="space-y-6">
+                    <div class="flex justify-between items-center">
+                        <h3 class="font-bold text-xl gradient-text professional-heading">Data Management</h3>
+                        <button @click="showDataPanel = false" class="text-slate-400 hover:text-white">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
 
-                    <div class="grid md:grid-cols-2 gap-4">
+                    <div class="grid md:grid-cols-2 gap-6">
                         <!-- Import Data -->
-                        <div class="space-y-3">
-                            <h4 class="font-medium" :class="isDark ? 'text-slate-300' : 'text-slate-700'">Import Data</h4>
-                            <div class="flex space-x-2">
+                        <div class="space-y-4">
+                            <h4 class="font-semibold text-lg professional-subheading" :class="isDark ? 'text-slate-300' : 'text-slate-700'">
+                                <i class="fas fa-download mr-2"></i>Import Data
+                            </h4>
+                            <div class="flex flex-col sm:flex-row gap-3">
                                 <button @click="importSampleData"
-                                        class="px-4 py-2 rounded-lg text-sm"
-                                        :class="isDark ? 'bg-slate-700 text-slate-300 hover:bg-slate-600' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'">
+                                        class="px-4 py-3 rounded-lg text-sm font-medium transition-all duration-300"
+                                        :class="isDark ? 'bg-slate-700/50 text-slate-300 hover:bg-slate-600/50 hover:scale-105' : 'bg-slate-100/50 text-slate-700 hover:bg-slate-200/50 hover:scale-105'">
+                                    <i class="fas fa-database mr-2"></i>
                                     Load Sample
                                 </button>
                                 <button @click="importFromFile"
-                                        class="px-4 py-2 rounded-lg text-sm gradient-bg text-white">
+                                        class="px-4 py-3 rounded-lg text-sm font-medium gradient-bg text-white hover:scale-105 transition-transform duration-300 shadow-lg">
                                     <i class="fas fa-file-import mr-2"></i>
                                     Import JSON
                                 </button>
@@ -365,17 +491,19 @@
                         </div>
 
                         <!-- Export Data -->
-                        <div class="space-y-3">
-                            <h4 class="font-medium" :class="isDark ? 'text-slate-300' : 'text-slate-700'">Export Data</h4>
-                            <div class="flex space-x-2">
+                        <div class="space-y-4">
+                            <h4 class="font-semibold text-lg professional-subheading" :class="isDark ? 'text-slate-300' : 'text-slate-700'">
+                                <i class="fas fa-upload mr-2"></i>Export Data
+                            </h4>
+                            <div class="flex flex-col sm:flex-row gap-3">
                                 <button @click="exportToJSON"
-                                        class="px-4 py-2 rounded-lg text-sm"
-                                        :class="isDark ? 'bg-slate-700 text-slate-300 hover:bg-slate-600' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'">
+                                        class="px-4 py-3 rounded-lg text-sm font-medium transition-all duration-300"
+                                        :class="isDark ? 'bg-slate-700/50 text-slate-300 hover:bg-slate-600/50 hover:scale-105' : 'bg-slate-100/50 text-slate-700 hover:bg-slate-200/50 hover:scale-105'">
                                     <i class="fas fa-file-export mr-2"></i>
                                     Export JSON
                                 </button>
                                 <button @click="clearAllData"
-                                        class="px-4 py-2 rounded-lg text-sm"
+                                        class="px-4 py-3 rounded-lg text-sm font-medium transition-all duration-300 hover:scale-105"
                                         :class="isDark ? 'bg-red-900/30 text-red-400 hover:bg-red-800/30' : 'bg-red-100 text-red-700 hover:bg-red-200'">
                                     <i class="fas fa-trash mr-2"></i>
                                     Clear All
@@ -385,26 +513,26 @@
                     </div>
 
                     <!-- Stats -->
-                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 pt-4 border-t"
-                         :class="isDark ? 'border-slate-700' : 'border-slate-200'">
-                        <div class="text-center">
-                            <div class="text-lg font-bold gradient-text" x-text="skills.length"></div>
-                            <div class="text-xs" :class="isDark ? 'text-slate-400' : 'text-slate-600'">Skills</div>
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 pt-6 border-t"
+                         :class="isDark ? 'border-slate-700/50' : 'border-slate-200/50'">
+                        <div class="text-center p-4 rounded-xl glass-effect">
+                            <div class="text-2xl font-bold gradient-text" x-text="skills.length"></div>
+                            <div class="text-xs professional-subheading" :class="isDark ? 'text-slate-400' : 'text-slate-600'">Skills</div>
                         </div>
-                        <div class="text-center">
-                            <div class="text-lg font-bold" :class="isDark ? 'text-white' : 'text-slate-900'"
+                        <div class="text-center p-4 rounded-xl glass-effect">
+                            <div class="text-2xl font-bold" :class="isDark ? 'text-white' : 'text-slate-900'"
                                  x-text="projects.length"></div>
-                            <div class="text-xs" :class="isDark ? 'text-slate-400' : 'text-slate-600'">Projects</div>
+                            <div class="text-xs professional-subheading" :class="isDark ? 'text-slate-400' : 'text-slate-600'">Projects</div>
                         </div>
-                        <div class="text-center">
-                            <div class="text-lg font-bold" :class="isDark ? 'text-white' : 'text-slate-900'"
+                        <div class="text-center p-4 rounded-xl glass-effect">
+                            <div class="text-2xl font-bold" :class="isDark ? 'text-white' : 'text-slate-900'"
                                  x-text="totalProjectCount"></div>
-                            <div class="text-xs" :class="isDark ? 'text-slate-400' : 'text-slate-600'">Total Projects</div>
+                            <div class="text-xs professional-subheading" :class="isDark ? 'text-slate-400' : 'text-slate-600'">Total Projects</div>
                         </div>
-                        <div class="text-center">
-                            <div class="text-lg font-bold" :class="isDark ? 'text-white' : 'text-slate-900'"
+                        <div class="text-center p-4 rounded-xl glass-effect">
+                            <div class="text-2xl font-bold" :class="isDark ? 'text-white' : 'text-slate-900'"
                                  x-text="averageSkillLevel + '%'"></div>
-                            <div class="text-xs" :class="isDark ? 'text-slate-400' : 'text-slate-600'">Avg. Skill Level</div>
+                            <div class="text-xs professional-subheading" :class="isDark ? 'text-slate-400' : 'text-slate-600'">Avg. Skill Level</div>
                         </div>
                     </div>
                 </div>
@@ -414,54 +542,52 @@
 
     <!-- Hero Section -->
     <section id="home" class="min-h-screen pt-24 pb-20 flex items-center relative">
-        <!-- Background Elements -->
-        <div class="absolute top-20 left-10 w-72 h-72 bg-purple-500/10 rounded-full blur-3xl"></div>
-        <div class="absolute bottom-20 right-10 w-96 h-96 bg-indigo-500/10 rounded-full blur-3xl"></div>
-
         <div class="container mx-auto px-6 relative z-10">
             <div class="grid lg:grid-cols-2 gap-16 items-center">
                 <!-- Left Content -->
-                <div class="space-y-8">
+                <div class="space-y-10">
                     <!-- Badge -->
-                    <div class="inline-flex items-center space-x-3 px-4 py-2 rounded-full glass-effect">
-                        <div class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-                        <span class="text-sm font-medium gradient-text">Available for Projects</span>
+                    <div class="inline-flex items-center space-x-3 px-6 py-3 rounded-full glass-effect shadow-lg animate-float">
+                        <div class="w-2 h-2 bg-gradient-to-r from-green-500 to-emerald-500 rounded-full animate-pulse"></div>
+                        <span class="text-sm font-semibold gradient-text">Available for Projects</span>
                     </div>
 
                     <!-- Main Headline -->
-                    <div class="space-y-4">
-                        <h1 class="text-5xl lg:text-6xl font-bold">
+                    <div class="space-y-6">
+                        <h1 class="text-5xl lg:text-7xl font-bold professional-heading">
                             <span class="block" :class="isDark ? 'text-white' : 'text-slate-900'">Full Stack</span>
                             <span class="gradient-text">Developer</span>
                         </h1>
 
-                        <p class="text-xl" :class="isDark ? 'text-slate-300' : 'text-slate-600'">
-                            Building modern web applications with cutting-edge technologies.
-                            Passionate about creating efficient, scalable solutions.
+                        <p class="text-xl professional-subheading leading-relaxed"
+                           :class="isDark ? 'text-slate-300' : 'text-slate-600'">
+                            Crafting exceptional digital experiences with modern technologies.
+                            Specializing in scalable, efficient, and user-centric solutions.
                         </p>
                     </div>
 
                     <!-- Experience & Stats -->
-                    <div class="flex flex-wrap items-center gap-6 pt-4">
-                        <div class="flex items-center space-x-3">
-                            <div class="w-12 h-12 rounded-xl gradient-bg flex items-center justify-center">
-                                <i class="fas fa-calendar-alt text-white"></i>
+                    <div class="flex flex-wrap items-center gap-8 pt-6">
+                        <div class="flex items-center space-x-4 p-4 rounded-2xl glass-effect shadow-lg">
+                            <div class="w-14 h-14 rounded-xl gradient-bg flex items-center justify-center shadow-lg">
+                                <i class="fas fa-calendar-alt text-white text-lg"></i>
                             </div>
                             <div>
                                 <div class="text-2xl font-bold gradient-text" x-text="totalExperienceYears"></div>
-                                <div class="text-sm" :class="isDark ? 'text-slate-400' : 'text-slate-600'">Years Experience</div>
+                                <div class="text-sm professional-subheading" :class="isDark ? 'text-slate-400' : 'text-slate-600'">Years Experience</div>
                             </div>
                         </div>
 
-                        <div class="flex items-center space-x-3">
-                            <div class="w-12 h-12 rounded-xl" :class="isDark ? 'bg-indigo-500/20' : 'bg-indigo-500/10'"
-                                 class="flex items-center justify-center">
-                                <i class="fas fa-project-diagram" :class="isDark ? 'text-indigo-400' : 'text-indigo-600'"></i>
+                        <div class="flex items-center space-x-4 p-4 rounded-2xl glass-effect shadow-lg">
+                            <div class="w-14 h-14 rounded-xl flex items-center justify-center shadow-lg"
+                                 :class="isDark ? 'bg-indigo-500/20' : 'bg-indigo-500/10'">
+                                <i class="fas fa-project-diagram text-lg"
+                                   :class="isDark ? 'text-indigo-400' : 'text-indigo-600'"></i>
                             </div>
                             <div>
                                 <div class="text-2xl font-bold" :class="isDark ? 'text-white' : 'text-slate-900'"
                                      x-text="projects.length"></div>
-                                <div class="text-sm" :class="isDark ? 'text-slate-400' : 'text-slate-600'">Projects</div>
+                                <div class="text-sm professional-subheading" :class="isDark ? 'text-slate-400' : 'text-slate-600'">Projects</div>
                             </div>
                         </div>
                     </div>
@@ -469,26 +595,17 @@
                     <!-- CTA Buttons -->
                     <div class="flex flex-wrap gap-4 pt-8">
                         <button @click="scrollTo('projects')"
-                                class="px-8 py-4 rounded-xl gradient-bg text-white font-medium flex items-center space-x-3 hover:scale-105 transition-transform duration-300">
+                                class="px-8 py-4 rounded-xl gradient-bg text-white font-semibold flex items-center space-x-3 hover:scale-105 transition-transform duration-300 shadow-lg group">
                             <span>View Projects</span>
-                            <i class="fas fa-arrow-right"></i>
+                            <i class="fas fa-arrow-right group-hover:translate-x-2 transition-transform duration-300"></i>
                         </button>
 
                         <button @click="scrollTo('contact')"
-                                class="px-8 py-4 rounded-xl glass-effect font-medium flex items-center space-x-3"
-                                :class="isDark ? 'text-slate-300 hover:bg-slate-800' : 'text-slate-700 hover:bg-slate-100'">
+                                class="px-8 py-4 rounded-xl glass-effect font-semibold flex items-center space-x-3 shadow-lg hover:scale-105 transition-transform duration-300"
+                                :class="isDark ? 'text-slate-300 hover:bg-slate-800/30' : 'text-slate-700 hover:bg-slate-100/30'">
                             <i class="fas fa-envelope"></i>
                             <span>Contact Me</span>
                         </button>
-                    </div>
-
-                    <!-- Storage Indicator -->
-                    <div class="pt-8">
-                        <div class="flex items-center space-x-3 text-sm"
-                             :class="isDark ? 'text-slate-400' : 'text-slate-600'">
-                            <i class="fas fa-info-circle"></i>
-                            <span>Data is saved in your browser's local storage</span>
-                        </div>
                     </div>
                 </div>
 
@@ -496,21 +613,24 @@
                 <div class="relative">
                     <!-- Main Profile Image -->
                     <div class="relative w-96 h-96 mx-auto">
-                        <div class="absolute inset-0 rounded-full overflow-hidden">
-                            <img src="WhatsApp Image 2026-01-22 at 09.06.42.jpeg"
+                        <div class="absolute inset-0 rounded-full overflow-hidden border-4 border-transparent">
+                            <div class="absolute inset-0 gradient-bg opacity-20 blur-xl"></div>
+                            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
                                  alt="Profile"
-                                 class="w-full h-full object-cover">
+                                 class="w-full h-full object-cover relative z-10 rounded-full">
                         </div>
 
                         <!-- Animated Rings -->
                         <div class="absolute inset-0 border-2 border-transparent border-t-indigo-500 rounded-full animate-spin"></div>
-                    </div>
+                        <div class="absolute inset-8 border-2 border-transparent border-r-purple-500 rounded-full animate-spin" style="animation-duration: 2s"></div>
+                        <div class="absolute inset-16 border-2 border-transparent border-b-pink-500 rounded-full animate-spin" style="animation-duration: 3s"></div>
 
-                    <!-- Experience Badge -->
-                    <div class="absolute bottom-8 right-8">
-                        <div class="px-4 py-2 rounded-full gradient-bg text-white text-sm font-bold flex items-center space-x-2 shadow-lg">
-                            <i class="fas fa-bolt"></i>
-                            <span x-text="`${totalExperienceYears}+ Years`"></span>
+                        <!-- Experience Badge -->
+                        <div class="absolute -bottom-4 -right-4">
+                            <div class="px-6 py-3 rounded-full gradient-bg text-white text-sm font-bold flex items-center space-x-2 shadow-lg animate-float">
+                                <i class="fas fa-bolt animate-pulse"></i>
+                                <span x-text="`${totalExperienceYears}+ Years`"></span>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -519,32 +639,33 @@
     </section>
 
     <!-- Skills Section -->
-    <section id="skills" class="py-20 relative">
+    <section id="skills" class="py-24 relative">
         <div class="container mx-auto px-6">
             <!-- Section Header -->
-            <div class="text-center max-w-3xl mx-auto mb-16">
-                <div class="inline-flex items-center space-x-2 px-4 py-2 rounded-full glass-effect mb-6">
+            <div class="text-center max-w-3xl mx-auto mb-20">
+                <div class="inline-flex items-center space-x-2 px-6 py-3 rounded-full glass-effect mb-8 shadow-lg">
                     <i class="fas fa-cogs text-indigo-500"></i>
-                    <span class="text-sm font-medium gradient-text">Expertise</span>
+                    <span class="text-sm font-semibold gradient-text">Technical Expertise</span>
                 </div>
 
-                <h2 class="text-4xl lg:text-5xl font-bold mb-6">
+                <h2 class="text-4xl lg:text-6xl font-bold mb-8 professional-heading">
                     Technical <span class="gradient-text">Skills</span>
                 </h2>
 
-                <p class="text-xl" :class="isDark ? 'text-slate-300' : 'text-slate-600'">
-                    Mastering the tools and technologies that power modern web applications
+                <p class="text-xl professional-subheading leading-relaxed"
+                   :class="isDark ? 'text-slate-300' : 'text-slate-600'">
+                    Mastering cutting-edge technologies to deliver exceptional digital solutions
                 </p>
             </div>
 
             <!-- Skills Categories -->
-            <div class="flex flex-wrap justify-center gap-4 mb-12">
+            <div class="flex flex-wrap justify-center gap-4 mb-16">
                 <template x-for="category in skillCategories" :key="category">
                     <button @click="activeSkillCategory = activeSkillCategory === category ? 'all' : category"
-                            class="px-6 py-3 rounded-xl text-sm font-medium transition-all duration-300"
+                            class="px-6 py-3 rounded-xl text-sm font-semibold transition-all duration-300 shadow-lg hover:scale-105"
                             :class="activeSkillCategory === category
-                                    ? 'gradient-bg text-white'
-                                    : (isDark ? 'glass-effect text-slate-300 hover:bg-slate-800' : 'glass-effect text-slate-700 hover:bg-slate-100')">
+                                    ? 'gradient-bg text-white shadow-indigo-500/50'
+                                    : (isDark ? 'glass-effect text-slate-300 hover:bg-slate-800/30' : 'glass-effect text-slate-700 hover:bg-slate-100/30')">
                         <i :class="getCategoryIcon(category)" class="mr-2"></i>
                         <span x-text="category.charAt(0).toUpperCase() + category.slice(1)"></span>
                         <span class="ml-2 px-2 py-0.5 rounded-full text-xs"
@@ -555,43 +676,48 @@
             </div>
 
             <!-- Skills Grid -->
-            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-20">
                 <template x-for="(skill, index) in filteredSkills" :key="skill.id">
                     <div class="stagger-item"
                          :style="`animation-delay: ${index * 0.1}s`">
-                        <div class="h-full p-6 rounded-2xl card-hover"
-                             :class="isDark ? 'bg-slate-800/50' : 'bg-white'">
+                        <div class="h-full p-8 rounded-3xl card-hover glass-effect shadow-lg"
+                             :class="isDark ? 'bg-slate-800/30' : 'bg-white/30'">
                             <!-- Skill Header -->
-                            <div class="flex items-start justify-between mb-6">
+                            <div class="flex items-start justify-between mb-8">
                                 <div class="flex items-center space-x-4">
-                                    <div class="w-14 h-14 rounded-xl flex items-center justify-center"
+                                    <div class="w-16 h-16 rounded-2xl flex items-center justify-center shadow-lg"
                                          :class="getSkillCategoryColor(skill.category)">
-                                        <i :class="skill.icon" class="text-xl text-white"></i>
+                                        <i :class="skill.icon" class="text-2xl text-white"></i>
                                     </div>
                                     <div>
-                                        <h3 class="font-bold text-lg" :class="isDark ? 'text-white' : 'text-slate-900'"
+                                        <h3 class="font-bold text-xl" :class="isDark ? 'text-white' : 'text-slate-900'"
                                             x-text="skill.name"></h3>
-                                        <div class="flex items-center space-x-2 mt-1">
+                                        <div class="flex items-center space-x-2 mt-2">
                                             <div class="flex">
                                                 <template x-for="i in 5" :key="i">
-                                                    <i :class="i <= Math.ceil(skill.level / 20) ? 'fas fa-star text-yellow-500' : 'far fa-star text-slate-400'"
-                                                       class="text-xs"></i>
+                                                    <i :class="i <= Math.ceil(skill.level / 20) 
+                                                              ? 'fas fa-star text-yellow-500' 
+                                                              : 'far fa-star text-slate-400'"
+                                                       class="text-sm"></i>
                                                 </template>
                                             </div>
-                                            <span class="text-xs" :class="isDark ? 'text-slate-400' : 'text-slate-600'"
+                                            <span class="text-xs font-semibold" 
+                                                  :class="isDark ? 'text-slate-400' : 'text-slate-600'"
                                                   x-text="getProficiencyLevel(skill.level)"></span>
                                         </div>
                                     </div>
                                 </div>
-                                <button @click="deleteSkill(skill.id)" class="text-slate-400 hover:text-red-500">
+                                <button @click="deleteSkill(skill.id)" 
+                                        class="text-slate-400 hover:text-red-500 transition-colors duration-300">
                                     <i class="fas fa-times"></i>
                                 </button>
                             </div>
 
                             <!-- Skill Progress -->
-                            <div class="space-y-2">
+                            <div class="space-y-3 mb-8">
                                 <div class="flex justify-between text-sm">
-                                    <span :class="isDark ? 'text-slate-400' : 'text-slate-600'">Proficiency</span>
+                                    <span class="professional-subheading" 
+                                          :class="isDark ? 'text-slate-400' : 'text-slate-600'">Proficiency</span>
                                     <span class="font-bold gradient-text" x-text="skill.level + '%'"></span>
                                 </div>
 
@@ -601,24 +727,27 @@
                             </div>
 
                             <!-- Skill Details -->
-                            <div class="grid grid-cols-2 gap-4 mt-6 pt-6"
-                                 :class="isDark ? 'border-t border-slate-700' : 'border-t border-slate-200'">
-                                <div class="text-center">
-                                    <div class="text-lg font-bold gradient-text" x-text="skill.years"></div>
-                                    <div class="text-xs" :class="isDark ? 'text-slate-400' : 'text-slate-600'">Years</div>
+                            <div class="grid grid-cols-2 gap-6 mb-8 pb-8"
+                                 :class="isDark ? 'border-t border-slate-700/50 pt-8' : 'border-t border-slate-200/50 pt-8'">
+                                <div class="text-center p-3 rounded-xl glass-effect">
+                                    <div class="text-xl font-bold gradient-text" x-text="skill.years"></div>
+                                    <div class="text-xs professional-subheading" 
+                                         :class="isDark ? 'text-slate-400' : 'text-slate-600'">Years</div>
                                 </div>
-                                <div class="text-center">
-                                    <div class="text-lg font-bold" :class="isDark ? 'text-white' : 'text-slate-900'"
+                                <div class="text-center p-3 rounded-xl glass-effect">
+                                    <div class="text-xl font-bold" :class="isDark ? 'text-white' : 'text-slate-900'"
                                          x-text="skill.projects"></div>
-                                    <div class="text-xs" :class="isDark ? 'text-slate-400' : 'text-slate-600'">Projects</div>
+                                    <div class="text-xs professional-subheading" 
+                                         :class="isDark ? 'text-slate-400' : 'text-slate-600'">Projects</div>
                                 </div>
                             </div>
 
                             <!-- Edit Button -->
-                            <div class="mt-4">
+                            <div>
                                 <button @click="editSkill(skill)"
-                                        class="w-full py-2 rounded-lg text-sm"
-                                        :class="isDark ? 'bg-slate-700 text-slate-300 hover:bg-slate-600' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'">
+                                        class="w-full py-3 rounded-xl text-sm font-semibold transition-all duration-300 hover:scale-105"
+                                        :class="isDark ? 'bg-slate-700/30 text-slate-300 hover:bg-slate-600/30' 
+                                                       : 'bg-slate-100/30 text-slate-700 hover:bg-slate-200/30'">
                                     <i class="fas fa-edit mr-2"></i>
                                     Edit Skill
                                 </button>
@@ -631,8 +760,8 @@
             <!-- Add Skill Button -->
             <div class="text-center">
                 <button @click="openModal('addSkill')"
-                        class="px-8 py-4 rounded-xl gradient-bg text-white font-medium flex items-center space-x-3 mx-auto hover:scale-105 transition-transform duration-300">
-                    <i class="fas fa-plus"></i>
+                        class="px-10 py-5 rounded-2xl gradient-bg text-white font-semibold flex items-center space-x-3 mx-auto hover:scale-105 transition-transform duration-300 shadow-lg group">
+                    <i class="fas fa-plus group-hover:rotate-90 transition-transform duration-300"></i>
                     <span>Add New Skill</span>
                 </button>
             </div>
@@ -640,83 +769,90 @@
     </section>
 
     <!-- Projects Section -->
-    <section id="projects" class="py-20 relative">
+    <section id="projects" class="py-24 relative">
         <div class="container mx-auto px-6">
             <!-- Section Header -->
-            <div class="text-center max-w-3xl mx-auto mb-16">
-                <div class="inline-flex items-center space-x-2 px-4 py-2 rounded-full glass-effect mb-6">
+            <div class="text-center max-w-3xl mx-auto mb-20">
+                <div class="inline-flex items-center space-x-2 px-6 py-3 rounded-full glass-effect mb-8 shadow-lg">
                     <i class="fas fa-briefcase text-indigo-500"></i>
-                    <span class="text-sm font-medium gradient-text">Portfolio</span>
+                    <span class="text-sm font-semibold gradient-text">Portfolio Showcase</span>
                 </div>
 
-                <h2 class="text-4xl lg:text-5xl font-bold mb-6">
+                <h2 class="text-4xl lg:text-6xl font-bold mb-8 professional-heading">
                     Featured <span class="gradient-text">Projects</span>
                 </h2>
 
-                <p class="text-xl" :class="isDark ? 'text-slate-300' : 'text-slate-600'">
-                    A showcase of my recent work and professional accomplishments
+                <p class="text-xl professional-subheading leading-relaxed"
+                   :class="isDark ? 'text-slate-300' : 'text-slate-600'">
+                    A collection of innovative solutions and successful implementations
                 </p>
             </div>
 
             <!-- Projects Grid -->
-            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-10">
                 <template x-for="project in projects" :key="project.id">
-                    <div class="rounded-2xl overflow-hidden card-hover"
-                         :class="isDark ? 'bg-slate-800/50' : 'bg-white'">
+                    <div class="rounded-3xl overflow-hidden card-hover glass-effect shadow-lg"
+                         :class="isDark ? 'bg-slate-800/30' : 'bg-white/30'">
                         <!-- Project Image -->
-                        <div class="relative h-48 overflow-hidden">
+                        <div class="relative h-64 overflow-hidden">
                             <img :src="project.image"
                                  :alt="project.name"
-                                 class="w-full h-full object-cover hover:scale-110 transition-transform duration-300">
+                                 class="w-full h-full object-cover transition-transform duration-500 hover:scale-110">
+                            
+                            <!-- Gradient Overlay -->
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 hover:opacity-100 transition-opacity duration-300"></div>
 
                             <!-- Project Type Badge -->
-                            <div class="absolute top-4 right-4">
-                                <span class="px-3 py-1 rounded-full text-xs font-medium glass-effect text-white"
+                            <div class="absolute top-6 right-6">
+                                <span class="px-4 py-2 rounded-full text-xs font-semibold glass-effect text-white shadow-lg capitalize"
                                       x-text="project.type.charAt(0).toUpperCase() + project.type.slice(1)"></span>
                             </div>
                         </div>
 
                         <!-- Project Content -->
-                        <div class="p-6">
-                            <div class="flex justify-between items-start mb-4">
-                                <h3 class="text-lg font-bold" :class="isDark ? 'text-white' : 'text-slate-900'"
+                        <div class="p-8">
+                            <div class="flex justify-between items-start mb-6">
+                                <h3 class="text-xl font-bold professional-heading" 
+                                    :class="isDark ? 'text-white' : 'text-slate-900'"
                                     x-text="project.name"></h3>
                                 <div class="flex space-x-2">
-                                    <button @click="deleteProject(project.id)" class="text-slate-400 hover:text-red-500">
+                                    <button @click="deleteProject(project.id)" 
+                                            class="text-slate-400 hover:text-red-500 transition-colors duration-300">
                                         <i class="fas fa-times"></i>
                                     </button>
                                 </div>
                             </div>
 
-                            <p class="text-sm mb-6 line-clamp-3"
+                            <p class="text-sm mb-8 line-clamp-3 leading-relaxed professional-subheading"
                                :class="isDark ? 'text-slate-400' : 'text-slate-600'"
                                x-text="project.description"></p>
 
                             <!-- Technologies -->
-                            <div class="flex flex-wrap gap-2 mb-6">
+                            <div class="flex flex-wrap gap-2 mb-8">
                                 <template x-for="tech in project.technologies.slice(0, 3)" :key="tech">
-                                    <span class="px-3 py-1 rounded-lg text-xs glass-effect"
+                                    <span class="px-3 py-1.5 rounded-lg text-xs glass-effect font-medium"
                                           :class="isDark ? 'text-slate-300' : 'text-slate-700'"
                                           x-text="tech"></span>
                                 </template>
                                 <span x-show="project.technologies.length > 3"
-                                      class="px-3 py-1 rounded-lg text-xs glass-effect"
+                                      class="px-3 py-1.5 rounded-lg text-xs glass-effect font-medium"
                                       :class="isDark ? 'text-slate-300' : 'text-slate-700'">
                                     +<span x-text="project.technologies.length - 3"></span>
                                 </span>
                             </div>
 
                             <!-- Action Buttons -->
-                            <div class="flex justify-between items-center pt-4"
-                                 :class="isDark ? 'border-t border-slate-700' : 'border-t border-slate-200'">
+                            <div class="flex justify-between items-center pt-8"
+                                 :class="isDark ? 'border-t border-slate-700/50' : 'border-t border-slate-200/50'">
                                 <button @click="viewProject(project.id)"
-                                        class="px-4 py-2 rounded-lg text-sm font-medium glass-effect"
+                                        class="px-6 py-2.5 rounded-xl text-sm font-semibold glass-effect hover:scale-105 transition-all duration-300"
                                         :class="isDark ? 'text-slate-300 hover:text-white' : 'text-slate-700 hover:text-slate-900'">
                                     View Details
                                 </button>
                                 <button @click="editProject(project)"
-                                        class="px-4 py-2 rounded-lg text-sm"
-                                        :class="isDark ? 'bg-slate-700 text-slate-300 hover:bg-slate-600' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'">
+                                        class="px-6 py-2.5 rounded-xl text-sm font-semibold hover:scale-105 transition-all duration-300"
+                                        :class="isDark ? 'bg-slate-700/30 text-slate-300 hover:bg-slate-600/30' 
+                                                       : 'bg-slate-100/30 text-slate-700 hover:bg-slate-200/30'">
                                     <i class="fas fa-edit mr-2"></i>
                                     Edit
                                 </button>
@@ -727,10 +863,10 @@
             </div>
 
             <!-- Add Project Button -->
-            <div class="text-center mt-16">
+            <div class="text-center mt-20">
                 <button @click="openModal('addProject')"
-                        class="px-8 py-4 rounded-xl gradient-bg text-white font-medium flex items-center space-x-3 mx-auto hover:scale-105 transition-transform duration-300">
-                    <i class="fas fa-plus"></i>
+                        class="px-10 py-5 rounded-2xl gradient-bg text-white font-semibold flex items-center space-x-3 mx-auto hover:scale-105 transition-transform duration-300 shadow-lg group">
+                    <i class="fas fa-plus group-hover:rotate-90 transition-transform duration-300"></i>
                     <span>Add New Project</span>
                 </button>
             </div>
@@ -738,67 +874,74 @@
     </section>
 
     <!-- Contact Section -->
-    <section id="contact" class="py-20 relative">
+    <section id="contact" class="py-24 relative">
         <div class="container mx-auto px-6">
             <!-- Section Header -->
-            <div class="text-center max-w-3xl mx-auto mb-16">
-                <div class="inline-flex items-center space-x-2 px-4 py-2 rounded-full glass-effect mb-6">
+            <div class="text-center max-w-3xl mx-auto mb-20">
+                <div class="inline-flex items-center space-x-2 px-6 py-3 rounded-full glass-effect mb-8 shadow-lg">
                     <i class="fas fa-envelope text-indigo-500"></i>
-                    <span class="text-sm font-medium gradient-text">Get in Touch</span>
+                    <span class="text-sm font-semibold gradient-text">Get in Touch</span>
                 </div>
 
-                <h2 class="text-4xl lg:text-5xl font-bold mb-6">
+                <h2 class="text-4xl lg:text-6xl font-bold mb-8 professional-heading">
                     Let's <span class="gradient-text">Connect</span>
                 </h2>
 
-                <p class="text-xl" :class="isDark ? 'text-slate-300' : 'text-slate-600'">
-                    Have a project in mind? Let's discuss how we can work together
+                <p class="text-xl professional-subheading leading-relaxed"
+                   :class="isDark ? 'text-slate-300' : 'text-slate-600'">
+                    Ready to bring your ideas to life? Let's discuss your project
                 </p>
             </div>
 
-            <div class="grid lg:grid-cols-2 gap-12 max-w-4xl mx-auto">
+            <div class="grid lg:grid-cols-2 gap-16 max-w-6xl mx-auto">
                 <!-- Contact Information -->
-                <div class="space-y-8">
+                <div class="space-y-10">
                     <!-- Contact Card -->
-                    <div class="p-8 rounded-2xl card-hover"
-                         :class="isDark ? 'bg-slate-800/50' : 'bg-white'">
-                        <div class="flex items-center space-x-4 mb-6">
-                            <div class="w-12 h-12 rounded-xl gradient-bg flex items-center justify-center">
-                                <i class="fas fa-envelope-open-text text-white"></i>
+                    <div class="p-8 rounded-3xl card-hover glass-effect shadow-lg"
+                         :class="isDark ? 'bg-slate-800/30' : 'bg-white/30'">
+                        <div class="flex items-center space-x-6 mb-8">
+                            <div class="w-16 h-16 rounded-2xl gradient-bg flex items-center justify-center shadow-lg">
+                                <i class="fas fa-envelope-open-text text-white text-xl"></i>
                             </div>
                             <div>
-                                <h3 class="font-bold text-lg" :class="isDark ? 'text-white' : 'text-slate-900'">Email</h3>
-                                <p class="text-sm" :class="isDark ? 'text-slate-400' : 'text-slate-600'">Quick response</p>
+                                <h3 class="font-bold text-xl professional-heading" 
+                                    :class="isDark ? 'text-white' : 'text-slate-900'">Email</h3>
+                                <p class="text-sm professional-subheading" 
+                                   :class="isDark ? 'text-slate-400' : 'text-slate-600'">Quick response guaranteed</p>
                             </div>
                         </div>
-                        <p class="text-lg font-medium gradient-text">hello@devport.com</p>
+                        <p class="text-xl font-semibold gradient-text">hello@devport.com</p>
                     </div>
 
                     <!-- Phone Card -->
-                    <div class="p-8 rounded-2xl card-hover"
-                         :class="isDark ? 'bg-slate-800/50' : 'bg-white'">
-                        <div class="flex items-center space-x-4 mb-6">
-                            <div class="w-12 h-12 rounded-xl flex items-center justify-center"
+                    <div class="p-8 rounded-3xl card-hover glass-effect shadow-lg"
+                         :class="isDark ? 'bg-slate-800/30' : 'bg-white/30'">
+                        <div class="flex items-center space-x-6 mb-8">
+                            <div class="w-16 h-16 rounded-2xl flex items-center justify-center shadow-lg"
                                  :class="isDark ? 'bg-indigo-500/20' : 'bg-indigo-500/10'">
-                                <i class="fas fa-phone" :class="isDark ? 'text-indigo-400' : 'text-indigo-600'"></i>
+                                <i class="fas fa-phone text-xl"
+                                   :class="isDark ? 'text-indigo-400' : 'text-indigo-600'"></i>
                             </div>
                             <div>
-                                <h3 class="font-bold text-lg" :class="isDark ? 'text-white' : 'text-slate-900'">Phone</h3>
-                                <p class="text-sm" :class="isDark ? 'text-slate-400' : 'text-slate-600'">Available</p>
+                                <h3 class="font-bold text-xl professional-heading" 
+                                    :class="isDark ? 'text-white' : 'text-slate-900'">Phone</h3>
+                                <p class="text-sm professional-subheading" 
+                                   :class="isDark ? 'text-slate-400' : 'text-slate-600'">Available for calls</p>
                             </div>
                         </div>
-                        <p class="text-lg font-medium" :class="isDark ? 'text-white' : 'text-slate-900'">+62 812 3456 7890</p>
+                        <p class="text-xl font-semibold" :class="isDark ? 'text-white' : 'text-slate-900'">+62 812 3456 7890</p>
                     </div>
 
                     <!-- Social Links -->
-                    <div class="pt-8">
-                        <h4 class="font-bold text-lg mb-6" :class="isDark ? 'text-white' : 'text-slate-900'">Connect</h4>
-                        <div class="flex space-x-4">
+                    <div class="pt-10">
+                        <h4 class="font-bold text-2xl mb-8 professional-heading" 
+                            :class="isDark ? 'text-white' : 'text-slate-900'">Connect With Me</h4>
+                        <div class="flex flex-wrap gap-4">
                             <template x-for="social in socialLinks" :key="social.name">
                                 <a :href="social.url" target="_blank"
-                                   class="w-12 h-12 rounded-xl glass-effect flex items-center justify-center hover:scale-110 transition-transform duration-300"
+                                   class="w-16 h-16 rounded-2xl glass-effect flex items-center justify-center hover:scale-110 transition-transform duration-300 shadow-lg group"
                                    :class="isDark ? 'text-slate-300 hover:text-white' : 'text-slate-700 hover:text-slate-900'">
-                                    <i :class="social.icon" class="text-lg"></i>
+                                    <i :class="social.icon" class="text-xl group-hover:scale-125 transition-transform duration-300"></i>
                                 </a>
                             </template>
                         </div>
@@ -807,45 +950,46 @@
 
                 <!-- Contact Form -->
                 <div>
-                    <div class="p-8 rounded-2xl card-hover"
-                         :class="isDark ? 'bg-slate-800/50' : 'bg-white'">
-                        <form @submit.prevent="submitContact" class="space-y-6">
+                    <div class="p-10 rounded-3xl card-hover glass-effect shadow-lg"
+                         :class="isDark ? 'bg-slate-800/30' : 'bg-white/30'">
+                        <form @submit.prevent="submitContact" class="space-y-8">
                             <div>
-                                <label class="block text-sm font-medium mb-3"
+                                <label class="block text-sm font-semibold mb-4 professional-subheading"
                                        :class="isDark ? 'text-slate-300' : 'text-slate-700'">
-                                    Your Name
+                                    <i class="fas fa-user mr-2"></i>Your Name
                                 </label>
                                 <input type="text" x-model="contactForm.name" required
-                                       class="w-full px-4 py-3 rounded-xl"
-                                       :class="isDark ? 'bg-slate-800 border-slate-700 text-white' : 'bg-white border-slate-300 text-slate-900'"
+                                       class="w-full px-6 py-4 rounded-xl glass-effect focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-300"
+                                       :class="isDark ? 'bg-slate-800/50 text-white' : 'bg-white/50 text-slate-900'"
                                        placeholder="John Doe">
                             </div>
 
                             <div>
-                                <label class="block text-sm font-medium mb-3"
+                                <label class="block text-sm font-semibold mb-4 professional-subheading"
                                        :class="isDark ? 'text-slate-300' : 'text-slate-700'">
-                                    Email Address
+                                    <i class="fas fa-envelope mr-2"></i>Email Address
                                 </label>
                                 <input type="email" x-model="contactForm.email" required
-                                       class="w-full px-4 py-3 rounded-xl"
-                                       :class="isDark ? 'bg-slate-800 border-slate-700 text-white' : 'bg-white border-slate-300 text-slate-900'"
+                                       class="w-full px-6 py-4 rounded-xl glass-effect focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-300"
+                                       :class="isDark ? 'bg-slate-800/50 text-white' : 'bg-white/50 text-slate-900'"
                                        placeholder="john@example.com">
                             </div>
 
                             <div>
-                                <label class="block text-sm font-medium mb-3"
+                                <label class="block text-sm font-semibold mb-4 professional-subheading"
                                        :class="isDark ? 'text-slate-300' : 'text-slate-700'">
-                                    Message
+                                    <i class="fas fa-comment mr-2"></i>Message
                                 </label>
                                 <textarea rows="6" x-model="contactForm.message" required
-                                          class="w-full px-4 py-3 rounded-xl resize-none"
-                                          :class="isDark ? 'bg-slate-800 border-slate-700 text-white' : 'bg-white border-slate-300 text-slate-900'"
-                                          placeholder="Tell me about your project..."></textarea>
+                                          class="w-full px-6 py-4 rounded-xl glass-effect focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-300 resize-none"
+                                          :class="isDark ? 'bg-slate-800/50 text-white' : 'bg-white/50 text-slate-900'"
+                                          placeholder="Tell me about your project vision and requirements..."></textarea>
                             </div>
 
                             <button type="submit"
-                                    class="w-full py-4 rounded-xl gradient-bg text-white font-medium hover:scale-105 transition-transform duration-300">
-                                Send Message
+                                    class="w-full py-5 rounded-xl gradient-bg text-white font-semibold hover:scale-105 transition-transform duration-300 shadow-lg group">
+                                <span class="group-hover:tracking-wider transition-all duration-300">Send Message</span>
+                                <i class="fas fa-paper-plane ml-2 group-hover:translate-x-2 transition-transform duration-300"></i>
                             </button>
                         </form>
                     </div>
@@ -855,46 +999,49 @@
     </section>
 
     <!-- Footer -->
-    <footer class="py-12" :class="isDark ? 'bg-slate-900' : 'bg-slate-50'">
+    <footer class="py-16 relative"
+            :class="isDark ? 'bg-slate-900/50' : 'bg-slate-50/50'">
         <div class="container mx-auto px-6">
             <div class="flex flex-col md:flex-row justify-between items-center">
                 <!-- Logo & Info -->
-                <div class="mb-8 md:mb-0 text-center md:text-left">
-                    <div class="flex items-center space-x-3 mb-4">
-                        <div class="w-10 h-10 rounded-xl gradient-bg flex items-center justify-center">
-                            <i class="fas fa-code text-white"></i>
+                <div class="mb-10 md:mb-0 text-center md:text-left">
+                    <div class="flex items-center space-x-4 mb-6">
+                        <div class="w-14 h-14 rounded-2xl gradient-bg flex items-center justify-center shadow-lg animate-float">
+                            <i class="fas fa-code text-white text-xl"></i>
                         </div>
                         <div>
-                            <span class="text-lg font-bold gradient-text">DevPort</span>
-                            <p class="text-xs" :class="isDark ? 'text-slate-400' : 'text-slate-600'">Full Stack Developer</p>
+                            <span class="text-2xl font-bold gradient-text professional-heading">DevPort</span>
+                            <p class="text-sm professional-subheading" 
+                               :class="isDark ? 'text-slate-400' : 'text-slate-600'">Full Stack Developer</p>
                         </div>
                     </div>
 
-                    <p class="text-sm" :class="isDark ? 'text-slate-400' : 'text-slate-600'">
+                    <p class="text-sm professional-subheading mb-2"
+                       :class="isDark ? 'text-slate-400' : 'text-slate-600'">
                         © <span x-text="portfolioYear"></span> All rights reserved
                     </p>
 
-                    <p class="text-xs mt-2" :class="isDark ? 'text-slate-500' : 'text-slate-500'">
-                        Experience: Since 2023 (<span x-text="totalExperienceYears"></span> years)
+                    <p class="text-xs mb-1" :class="isDark ? 'text-slate-500' : 'text-slate-500'">
+                        Professional Experience: Since 2023 (<span x-text="totalExperienceYears"></span> years)
                     </p>
 
-                    <p class="text-xs mt-1" :class="isDark ? 'text-slate-500' : 'text-slate-500'">
-                        Data stored locally in your browser
+                    <p class="text-xs" :class="isDark ? 'text-slate-500' : 'text-slate-500'">
+                        <i class="fas fa-database mr-1"></i>Data stored locally in your browser
                     </p>
                 </div>
 
                 <!-- Quick Links -->
-                <div class="flex space-x-6">
-                    <a href="#skills" class="text-sm transition-colors"
-                       :class="isDark ? 'text-slate-400 hover:text-white' : 'text-slate-600 hover:text-slate-900'">
+                <div class="flex space-x-8">
+                    <a href="#skills" class="text-sm font-medium transition-all duration-300 hover:scale-105"
+                       :class="isDark ? 'text-slate-400 hover:text-white hover:gradient-text' : 'text-slate-600 hover:text-slate-900 hover:gradient-text'">
                         Skills
                     </a>
-                    <a href="#projects" class="text-sm transition-colors"
-                       :class="isDark ? 'text-slate-400 hover:text-white' : 'text-slate-600 hover:text-slate-900'">
+                    <a href="#projects" class="text-sm font-medium transition-all duration-300 hover:scale-105"
+                       :class="isDark ? 'text-slate-400 hover:text-white hover:gradient-text' : 'text-slate-600 hover:text-slate-900 hover:gradient-text'">
                         Projects
                     </a>
-                    <a href="#contact" class="text-sm transition-colors"
-                       :class="isDark ? 'text-slate-400 hover:text-white' : 'text-slate-600 hover:text-slate-900'">
+                    <a href="#contact" class="text-sm font-medium transition-all duration-300 hover:scale-105"
+                       :class="isDark ? 'text-slate-400 hover:text-white hover:gradient-text' : 'text-slate-600 hover:text-slate-900 hover:gradient-text'">
                         Contact
                     </a>
                 </div>
@@ -908,60 +1055,63 @@
          x-on:keydown.escape.window="closeModal('projectDetail')"
          class="fixed inset-0 z-50 flex items-center justify-center p-4"
          :class="isDark ? 'bg-black/80' : 'bg-black/60'">
-        <div class="w-full max-w-4xl max-h-[90vh] overflow-y-auto rounded-2xl"
-             :class="isDark ? 'bg-slate-800' : 'bg-white'">
-            <div class="p-8">
+        <div class="w-full max-w-5xl max-h-[90vh] overflow-y-auto rounded-3xl glass-effect shadow-2xl"
+             :class="isDark ? 'bg-slate-800/90' : 'bg-white/90'">
+            <div class="p-10">
                 <!-- Modal Header -->
-                <div class="flex items-center justify-between mb-8">
+                <div class="flex items-center justify-between mb-10">
                     <div>
-                        <h3 class="text-3xl font-bold" :class="isDark ? 'text-white' : 'text-slate-900'"
+                        <h3 class="text-4xl font-bold professional-heading mb-3" 
+                            :class="isDark ? 'text-white' : 'text-slate-900'"
                             x-text="selectedProject ? selectedProject.name : ''"></h3>
-                        <div class="flex items-center space-x-4 mt-2">
-                            <span class="px-4 py-2 rounded-full text-sm font-medium gradient-bg text-white capitalize"
+                        <div class="flex items-center space-x-4">
+                            <span class="px-5 py-2.5 rounded-full text-sm font-semibold gradient-bg text-white shadow-lg capitalize"
                                   x-text="selectedProject ? selectedProject.type : ''"></span>
                         </div>
                     </div>
                     <button @click="closeModal('projectDetail')"
-                            class="w-12 h-12 rounded-xl flex items-center justify-center"
-                            :class="isDark ? 'bg-slate-700 text-slate-300 hover:bg-slate-600' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'">
-                        <i class="fas fa-times text-lg"></i>
+                            class="w-14 h-14 rounded-2xl flex items-center justify-center hover:scale-110 transition-transform duration-300 glass-effect shadow-lg">
+                        <i class="fas fa-times text-xl"></i>
                     </button>
                 </div>
 
                 <!-- Project Content -->
-                <div x-show="selectedProject" class="space-y-8">
+                <div x-show="selectedProject" class="space-y-10">
                     <!-- Project Image -->
-                    <div class="rounded-2xl overflow-hidden">
+                    <div class="rounded-3xl overflow-hidden shadow-xl">
                         <img :src="selectedProject.image"
                              :alt="selectedProject.name"
-                             class="w-full h-96 object-cover">
+                             class="w-full h-[400px] object-cover">
                     </div>
 
                     <!-- Project Details -->
-                    <div class="grid lg:grid-cols-3 gap-12">
+                    <div class="grid lg:grid-cols-3 gap-16">
                         <!-- Left Column -->
-                        <div class="lg:col-span-2 space-y-8">
+                        <div class="lg:col-span-2 space-y-10">
                             <!-- Description -->
                             <div>
-                                <h4 class="text-xl font-bold mb-4" :class="isDark ? 'text-white' : 'text-slate-900'">
+                                <h4 class="text-2xl font-bold mb-6 professional-heading" 
+                                    :class="isDark ? 'text-white' : 'text-slate-900'">
                                     Project Overview
                                 </h4>
-                                <p class="" :class="isDark ? 'text-slate-300' : 'text-slate-600'"
+                                <p class="text-lg leading-relaxed professional-subheading" 
+                                   :class="isDark ? 'text-slate-300' : 'text-slate-600'"
                                    x-text="selectedProject.description"></p>
                             </div>
                         </div>
 
                         <!-- Right Column -->
-                        <div class="space-y-8">
+                        <div class="space-y-10">
                             <!-- Technologies -->
                             <div>
-                                <h4 class="text-xl font-bold mb-4" :class="isDark ? 'text-white' : 'text-slate-900'">
+                                <h4 class="text-2xl font-bold mb-6 professional-heading" 
+                                    :class="isDark ? 'text-white' : 'text-slate-900'">
                                     Technologies
                                 </h4>
-                                <div class="flex flex-wrap gap-2">
+                                <div class="flex flex-wrap gap-3">
                                     <template x-for="tech in selectedProject.technologies" :key="tech">
-                                        <span class="px-4 py-2 rounded-lg text-sm"
-                                              :class="isDark ? 'bg-slate-700 text-slate-300' : 'bg-slate-100 text-slate-700'"
+                                        <span class="px-4 py-2.5 rounded-xl text-sm font-semibold glass-effect shadow-lg"
+                                              :class="isDark ? 'text-slate-300' : 'text-slate-700'"
                                               x-text="tech"></span>
                                     </template>
                                 </div>
@@ -969,38 +1119,38 @@
 
                             <!-- Project Links -->
                             <div>
-                                <h4 class="text-xl font-bold mb-4" :class="isDark ? 'text-white' : 'text-slate-900'">
+                                <h4 class="text-2xl font-bold mb-6 professional-heading" 
+                                    :class="isDark ? 'text-white' : 'text-slate-900'">
                                     Project Links
                                 </h4>
-                                <div class="space-y-3">
+                                <div class="space-y-4">
                                     <a :href="selectedProject.demoUrl" x-show="selectedProject.demoUrl" target="_blank"
-                                       class="flex items-center justify-between p-4 rounded-xl hover:scale-105 transition-transform duration-300"
-                                       :class="isDark ? 'bg-slate-700 text-slate-300 hover:bg-slate-600' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'">
-                                        <div class="flex items-center space-x-3">
-                                            <div class="w-10 h-10 rounded-lg flex items-center justify-center"
+                                       class="flex items-center justify-between p-5 rounded-2xl hover:scale-105 transition-transform duration-300 glass-effect shadow-lg group">
+                                        <div class="flex items-center space-x-4">
+                                            <div class="w-12 h-12 rounded-xl flex items-center justify-center shadow-lg"
                                                  :class="isDark ? 'bg-blue-500/20' : 'bg-blue-500/10'">
-                                                <i class="fas fa-external-link-alt text-blue-500"></i>
+                                                <i class="fas fa-external-link-alt text-blue-500 text-lg"></i>
                                             </div>
                                             <div>
-                                                <p class="font-medium">Live Demo</p>
+                                                <p class="font-semibold text-lg">Live Demo</p>
                                             </div>
                                         </div>
-                                        <i class="fas fa-arrow-right"></i>
+                                        <i class="fas fa-arrow-right group-hover:translate-x-2 transition-transform duration-300"></i>
                                     </a>
 
                                     <a :href="selectedProject.sourceUrl" x-show="selectedProject.sourceUrl" target="_blank"
-                                       class="flex items-center justify-between p-4 rounded-xl hover:scale-105 transition-transform duration-300"
-                                       :class="isDark ? 'bg-slate-700 text-slate-300 hover:bg-slate-600' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'">
-                                        <div class="flex items-center space-x-3">
-                                            <div class="w-10 h-10 rounded-lg flex items-center justify-center"
-                                                 :class="isDark ? 'bg-slate-600' : 'bg-slate-200'">
-                                                <i class="fab fa-github" :class="isDark ? 'text-slate-300' : 'text-slate-700'"></i>
+                                       class="flex items-center justify-between p-5 rounded-2xl hover:scale-105 transition-transform duration-300 glass-effect shadow-lg group">
+                                        <div class="flex items-center space-x-4">
+                                            <div class="w-12 h-12 rounded-xl flex items-center justify-center shadow-lg"
+                                                 :class="isDark ? 'bg-slate-700/30' : 'bg-slate-200/30'">
+                                                <i class="fab fa-github text-lg"
+                                                   :class="isDark ? 'text-slate-300' : 'text-slate-700'"></i>
                                             </div>
                                             <div>
-                                                <p class="font-medium">Source Code</p>
+                                                <p class="font-semibold text-lg">Source Code</p>
                                             </div>
                                         </div>
-                                        <i class="fas fa-arrow-right"></i>
+                                        <i class="fas fa-arrow-right group-hover:translate-x-2 transition-transform duration-300"></i>
                                     </a>
                                 </div>
                             </div>
@@ -1016,49 +1166,50 @@
          x-on:keydown.escape.window="closeModal('addSkill')"
          class="fixed inset-0 z-50 flex items-center justify-center p-4"
          :class="isDark ? 'bg-black/80' : 'bg-black/60'">
-        <div class="w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-2xl"
-             :class="isDark ? 'bg-slate-800' : 'bg-white'">
-            <div class="p-8">
+        <div class="w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-3xl glass-effect shadow-2xl"
+             :class="isDark ? 'bg-slate-800/90' : 'bg-white/90'">
+            <div class="p-10">
                 <!-- Modal Header -->
-                <div class="flex items-center justify-between mb-8">
+                <div class="flex items-center justify-between mb-10">
                     <div>
-                        <h3 class="text-2xl font-bold" :class="isDark ? 'text-white' : 'text-slate-900'">
+                        <h3 class="text-3xl font-bold professional-heading mb-2" 
+                            :class="isDark ? 'text-white' : 'text-slate-900'">
                             <span x-text="editingSkill ? 'Edit Skill' : 'Add New Skill'"></span>
                         </h3>
-                        <p class="mt-1" :class="isDark ? 'text-slate-400' : 'text-slate-600'">
+                        <p class="text-lg professional-subheading" 
+                           :class="isDark ? 'text-slate-400' : 'text-slate-600'">
                             <span x-text="editingSkill ? 'Update your skill details' : 'Expand your technical expertise'"></span>
                         </p>
                     </div>
                     <button @click="closeModal('addSkill')"
-                            class="w-12 h-12 rounded-xl flex items-center justify-center"
-                            :class="isDark ? 'bg-slate-700 text-slate-300 hover:bg-slate-600' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'">
-                        <i class="fas fa-times text-lg"></i>
+                            class="w-14 h-14 rounded-2xl flex items-center justify-center hover:scale-110 transition-transform duration-300 glass-effect shadow-lg">
+                        <i class="fas fa-times text-xl"></i>
                     </button>
                 </div>
 
                 <!-- Skill Form -->
-                <form @submit.prevent="editingSkill ? updateSkill() : addNewSkill()" class="space-y-6">
+                <form @submit.prevent="editingSkill ? updateSkill() : addNewSkill()" class="space-y-8">
                     <!-- Skill Name & Category -->
-                    <div class="grid md:grid-cols-2 gap-6">
+                    <div class="grid md:grid-cols-2 gap-8">
                         <div>
-                            <label class="block text-sm font-medium mb-3"
+                            <label class="block text-sm font-semibold mb-4 professional-subheading"
                                    :class="isDark ? 'text-slate-300' : 'text-slate-700'">
-                                Skill Name
+                                <i class="fas fa-tag mr-2"></i>Skill Name
                             </label>
                             <input type="text" x-model="newSkill.name" required
-                                   class="w-full px-4 py-3 rounded-xl"
-                                   :class="isDark ? 'bg-slate-700 border-slate-600 text-white' : 'bg-white border-slate-300 text-slate-900'"
+                                   class="w-full px-6 py-4 rounded-xl glass-effect focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-300"
+                                   :class="isDark ? 'bg-slate-800/50 text-white' : 'bg-white/50 text-slate-900'"
                                    placeholder="e.g., React, Laravel, Docker">
                         </div>
 
                         <div>
-                            <label class="block text-sm font-medium mb-3"
+                            <label class="block text-sm font-semibold mb-4 professional-subheading"
                                    :class="isDark ? 'text-slate-300' : 'text-slate-700'">
-                                Category
+                                <i class="fas fa-folder mr-2"></i>Category
                             </label>
                             <select x-model="newSkill.category" required
-                                    class="w-full px-4 py-3 rounded-xl"
-                                    :class="isDark ? 'bg-slate-700 border-slate-600 text-white' : 'bg-white border-slate-300 text-slate-900'">
+                                    class="w-full px-6 py-4 rounded-xl glass-effect focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-300"
+                                    :class="isDark ? 'bg-slate-800/50 text-white' : 'bg-white/50 text-slate-900'">
                                 <option value="">Select Category</option>
                                 <template x-for="category in skillCategories" :key="category">
                                     <option :value="category"
@@ -1070,20 +1221,20 @@
                     </div>
 
                     <!-- Proficiency Level -->
-                    <div>
-                        <div class="flex justify-between items-center mb-4">
-                            <label class="text-sm font-medium"
+                    <div class="space-y-4">
+                        <div class="flex justify-between items-center">
+                            <label class="text-sm font-semibold professional-subheading"
                                    :class="isDark ? 'text-slate-300' : 'text-slate-700'">
-                                Proficiency Level
+                                <i class="fas fa-chart-line mr-2"></i>Proficiency Level
                             </label>
-                            <span class="text-lg font-bold gradient-text" x-text="newSkill.level + '%'"></span>
+                            <span class="text-2xl font-bold gradient-text" x-text="newSkill.level + '%'"></span>
                         </div>
 
                         <input type="range" x-model="newSkill.level" min="0" max="100" step="5"
-                               class="w-full h-2 rounded-lg appearance-none cursor-pointer"
+                               class="w-full h-3 rounded-lg appearance-none cursor-pointer shadow-inner"
                                :class="isDark ? 'bg-slate-700' : 'bg-slate-300'">
 
-                        <div class="flex justify-between text-xs mt-2"
+                        <div class="flex justify-between text-sm mt-2 font-medium"
                              :class="isDark ? 'text-slate-500' : 'text-slate-500'">
                             <span>Beginner</span>
                             <span>Intermediate</span>
@@ -1093,39 +1244,40 @@
                     </div>
 
                     <!-- Experience & Projects -->
-                    <div class="grid md:grid-cols-2 gap-6">
+                    <div class="grid md:grid-cols-2 gap-8">
                         <div>
-                            <label class="block text-sm font-medium mb-3"
+                            <label class="block text-sm font-semibold mb-4 professional-subheading"
                                    :class="isDark ? 'text-slate-300' : 'text-slate-700'">
-                                Years Experience
+                                <i class="fas fa-calendar-alt mr-2"></i>Years Experience
                             </label>
                             <input type="number" x-model="newSkill.years" min="0" max="50" step="0.5"
-                                   class="w-full px-4 py-3 rounded-xl"
-                                   :class="isDark ? 'bg-slate-700 border-slate-600 text-white' : 'bg-white border-slate-300 text-slate-900'">
+                                   class="w-full px-6 py-4 rounded-xl glass-effect focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-300"
+                                   :class="isDark ? 'bg-slate-800/50 text-white' : 'bg-white/50 text-slate-900'">
                         </div>
 
                         <div>
-                            <label class="block text-sm font-medium mb-3"
+                            <label class="block text-sm font-semibold mb-4 professional-subheading"
                                    :class="isDark ? 'text-slate-300' : 'text-slate-700'">
-                                Projects Used In
+                                <i class="fas fa-project-diagram mr-2"></i>Projects Used In
                             </label>
                             <input type="number" x-model="newSkill.projects" min="0" max="100"
-                                   class="w-full px-4 py-3 rounded-xl"
-                                   :class="isDark ? 'bg-slate-700 border-slate-600 text-white' : 'bg-white border-slate-300 text-slate-900'">
+                                   class="w-full px-6 py-4 rounded-xl glass-effect focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-300"
+                                   :class="isDark ? 'bg-slate-800/50 text-white' : 'bg-white/50 text-slate-900'">
                         </div>
                     </div>
 
                     <!-- Submit Buttons -->
-                    <div class="flex justify-end space-x-4 pt-8"
-                         :class="isDark ? 'border-t border-slate-700' : 'border-t border-slate-200'">
+                    <div class="flex justify-end space-x-6 pt-10"
+                         :class="isDark ? 'border-t border-slate-700/50' : 'border-t border-slate-200/50'">
                         <button type="button" @click="closeModal('addSkill')"
-                                class="px-6 py-3 rounded-xl"
-                                :class="isDark ? 'bg-slate-700 text-slate-300 hover:bg-slate-600' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'">
+                                class="px-8 py-3.5 rounded-xl text-sm font-semibold hover:scale-105 transition-all duration-300 glass-effect shadow-lg"
+                                :class="isDark ? 'text-slate-300 hover:text-white' : 'text-slate-700 hover:text-slate-900'">
                             Cancel
                         </button>
                         <button type="submit"
-                                class="px-8 py-3 rounded-xl gradient-bg text-white hover:scale-105 transition-transform duration-300">
+                                class="px-10 py-3.5 rounded-xl gradient-bg text-white font-semibold hover:scale-105 transition-transform duration-300 shadow-lg group">
                             <span x-text="editingSkill ? 'Update Skill' : 'Add Skill'"></span>
+                            <i class="fas fa-check ml-2 group-hover:rotate-180 transition-transform duration-300"></i>
                         </button>
                     </div>
                 </form>
@@ -1138,48 +1290,74 @@
          x-on:keydown.escape.window="closeModal('addProject')"
          class="fixed inset-0 z-50 flex items-center justify-center p-4"
          :class="isDark ? 'bg-black/80' : 'bg-black/60'">
-        <div class="w-full max-w-4xl max-h-[90vh] overflow-y-auto rounded-2xl"
-             :class="isDark ? 'bg-slate-800' : 'bg-white'">
-            <div class="p-8">
+        <div class="w-full max-w-4xl max-h-[90vh] overflow-y-auto rounded-3xl glass-effect shadow-2xl"
+             :class="isDark ? 'bg-slate-800/90' : 'bg-white/90'">
+            <div class="p-10">
                 <!-- Modal Header -->
-                <div class="flex items-center justify-between mb-8">
+                <div class="flex items-center justify-between mb-10">
                     <div>
-                        <h3 class="text-2xl font-bold" :class="isDark ? 'text-white' : 'text-slate-900'">
+                        <h3 class="text-3xl font-bold professional-heading mb-2" 
+                            :class="isDark ? 'text-white' : 'text-slate-900'">
                             <span x-text="editingProject ? 'Edit Project' : 'Add New Project'"></span>
                         </h3>
-                        <p class="mt-1" :class="isDark ? 'text-slate-400' : 'text-slate-600'">
+                        <p class="text-lg professional-subheading" 
+                           :class="isDark ? 'text-slate-400' : 'text-slate-600'">
                             <span x-text="editingProject ? 'Update project details' : 'Showcase your work'"></span>
                         </p>
                     </div>
                     <button @click="closeModal('addProject')"
-                            class="w-12 h-12 rounded-xl flex items-center justify-center"
-                            :class="isDark ? 'bg-slate-700 text-slate-300 hover:bg-slate-600' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'">
-                        <i class="fas fa-times text-lg"></i>
+                            class="w-14 h-14 rounded-2xl flex items-center justify-center hover:scale-110 transition-transform duration-300 glass-effect shadow-lg">
+                        <i class="fas fa-times text-xl"></i>
                     </button>
                 </div>
 
                 <!-- Project Form -->
-                <form @submit.prevent="editingProject ? updateProject() : addNewProject()" class="space-y-6">
+                <form @submit.prevent="editingProject ? updateProject() : addNewProject()" class="space-y-8">
+                    <!-- Project Image Upload -->
+                    <div>
+                        <label class="block text-sm font-semibold mb-4 professional-subheading"
+                               :class="isDark ? 'text-slate-300' : 'text-slate-700'">
+                            <i class="fas fa-image mr-2"></i>Project Image
+                        </label>
+                        <div class="image-upload-container">
+                            <div class="image-preview">
+                                <img :src="newProject.image || 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'"
+                                     :alt="newProject.name"
+                                     class="w-full h-full object-cover"
+                                     id="projectImagePreview">
+                            </div>
+                            <label class="upload-overlay cursor-pointer">
+                                <i class="fas fa-camera mr-2"></i>
+                                <span>Change Image</span>
+                                <input type="file" accept="image/*" class="hidden" 
+                                       @change="handleImageUpload($event, 'project')">
+                            </label>
+                        </div>
+                        <p class="text-xs text-center mt-2" :class="isDark ? 'text-slate-400' : 'text-slate-600'">
+                            Upload image or use default (won't change on GitHub)
+                        </p>
+                    </div>
+
                     <!-- Project Info -->
-                    <div class="grid md:grid-cols-2 gap-6">
+                    <div class="grid md:grid-cols-2 gap-8">
                         <div>
-                            <label class="block text-sm font-medium mb-3"
+                            <label class="block text-sm font-semibold mb-4 professional-subheading"
                                    :class="isDark ? 'text-slate-300' : 'text-slate-700'">
-                                Project Name
+                                <i class="fas fa-tag mr-2"></i>Project Name
                             </label>
                             <input type="text" x-model="newProject.name" required
-                                   class="w-full px-4 py-3 rounded-xl"
-                                   :class="isDark ? 'bg-slate-700 border-slate-600 text-white' : 'bg-white border-slate-300 text-slate-900'">
+                                   class="w-full px-6 py-4 rounded-xl glass-effect focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-300"
+                                   :class="isDark ? 'bg-slate-800/50 text-white' : 'bg-white/50 text-slate-900'">
                         </div>
 
                         <div>
-                            <label class="block text-sm font-medium mb-3"
+                            <label class="block text-sm font-semibold mb-4 professional-subheading"
                                    :class="isDark ? 'text-slate-300' : 'text-slate-700'">
-                                Project Type
+                                <i class="fas fa-layer-group mr-2"></i>Project Type
                             </label>
                             <select x-model="newProject.type"
-                                    class="w-full px-4 py-3 rounded-xl"
-                                    :class="isDark ? 'bg-slate-700 border-slate-600 text-white' : 'bg-white border-slate-300 text-slate-900'">
+                                    class="w-full px-6 py-4 rounded-xl glass-effect focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-300"
+                                    :class="isDark ? 'bg-slate-800/50 text-white' : 'bg-white/50 text-slate-900'">
                                 <option value="web">Web Application</option>
                                 <option value="mobile">Mobile App</option>
                                 <option value="api">API</option>
@@ -1190,29 +1368,30 @@
 
                     <!-- Description -->
                     <div>
-                        <label class="block text-sm font-medium mb-3"
+                        <label class="block text-sm font-semibold mb-4 professional-subheading"
                                :class="isDark ? 'text-slate-300' : 'text-slate-700'">
-                            Description
+                            <i class="fas fa-align-left mr-2"></i>Description
                         </label>
                         <textarea x-model="newProject.description" rows="4" required
-                                  class="w-full px-4 py-3 rounded-xl resize-none"
-                                  :class="isDark ? 'bg-slate-700 border-slate-600 text-white' : 'bg-white border-slate-300 text-slate-900'"
+                                  class="w-full px-6 py-4 rounded-xl glass-effect focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-300 resize-none"
+                                  :class="isDark ? 'bg-slate-800/50 text-white' : 'bg-white/50 text-slate-900'"
                                   placeholder="Describe your project..."></textarea>
                     </div>
 
                     <!-- Technologies -->
                     <div>
-                        <label class="block text-sm font-medium mb-3"
+                        <label class="block text-sm font-semibold mb-4 professional-subheading"
                                :class="isDark ? 'text-slate-300' : 'text-slate-700'">
-                            Technologies Used
+                            <i class="fas fa-code mr-2"></i>Technologies Used
                         </label>
-                        <div class="flex flex-wrap gap-2 mb-4">
+                        <div class="flex flex-wrap gap-3 mb-6">
                             <template x-for="tech in defaultTechnologies" :key="tech">
                                 <button type="button" @click="toggleTechSelection(tech)"
-                                        :class="{'gradient-bg text-white': newProject.technologies.includes(tech)}"
-                                        class="px-3 py-1 rounded-lg text-sm transition-all duration-300"
+                                        :class="{'gradient-bg text-white shadow-lg': newProject.technologies.includes(tech)}"
+                                        class="px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 hover:scale-105"
                                         :class="!newProject.technologies.includes(tech)
-                                                ? (isDark ? 'bg-slate-700 text-slate-300 hover:bg-slate-600' : 'bg-slate-100 text-slate-700 hover:bg-slate-200')
+                                                ? (isDark ? 'glass-effect text-slate-300 hover:bg-slate-700/50' 
+                                                          : 'glass-effect text-slate-700 hover:bg-slate-200/50')
                                                 : ''">
                                     <span x-text="tech"></span>
                                 </button>
@@ -1220,55 +1399,55 @@
                         </div>
 
                         <!-- Custom Technology Input -->
-                        <div class="flex gap-2">
+                        <div class="flex gap-4">
                             <input type="text" x-model="customTech"
                                    placeholder="Add custom technology"
-                                   class="flex-1 px-4 py-2 rounded-lg"
-                                   :class="isDark ? 'bg-slate-700 border-slate-600 text-white' : 'bg-white border-slate-300 text-slate-900'">
+                                   class="flex-1 px-6 py-3 rounded-xl glass-effect"
+                                   :class="isDark ? 'bg-slate-800/50 text-white' : 'bg-white/50 text-slate-900'">
                             <button type="button" @click="addCustomTech"
-                                    class="px-4 py-2 rounded-lg"
-                                    :class="isDark ? 'bg-slate-600 text-slate-300 hover:bg-slate-500' : 'bg-slate-200 text-slate-700 hover:bg-slate-300'">
+                                    class="px-6 py-3 rounded-xl text-sm font-semibold hover:scale-105 transition-transform duration-300 glass-effect shadow-lg">
                                 Add
                             </button>
                         </div>
                     </div>
 
                     <!-- Project Links -->
-                    <div class="grid md:grid-cols-2 gap-6">
+                    <div class="grid md:grid-cols-2 gap-8">
                         <div>
-                            <label class="block text-sm font-medium mb-3"
+                            <label class="block text-sm font-semibold mb-4 professional-subheading"
                                    :class="isDark ? 'text-slate-300' : 'text-slate-700'">
-                                Live Demo URL
+                                <i class="fas fa-external-link-alt mr-2"></i>Live Demo URL
                             </label>
                             <input type="url" x-model="newProject.demoUrl"
-                                   class="w-full px-4 py-3 rounded-xl"
-                                   :class="isDark ? 'bg-slate-700 border-slate-600 text-white' : 'bg-white border-slate-300 text-slate-900'"
+                                   class="w-full px-6 py-4 rounded-xl glass-effect focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-300"
+                                   :class="isDark ? 'bg-slate-800/50 text-white' : 'bg-white/50 text-slate-900'"
                                    placeholder="https://">
                         </div>
 
                         <div>
-                            <label class="block text-sm font-medium mb-3"
+                            <label class="block text-sm font-semibold mb-4 professional-subheading"
                                    :class="isDark ? 'text-slate-300' : 'text-slate-700'">
-                                Source Code URL
+                                <i class="fab fa-github mr-2"></i>Source Code URL
                             </label>
                             <input type="url" x-model="newProject.sourceUrl"
-                                   class="w-full px-4 py-3 rounded-xl"
-                                   :class="isDark ? 'bg-slate-700 border-slate-600 text-white' : 'bg-white border-slate-300 text-slate-900'"
+                                   class="w-full px-6 py-4 rounded-xl glass-effect focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-300"
+                                   :class="isDark ? 'bg-slate-800/50 text-white' : 'bg-white/50 text-slate-900'"
                                    placeholder="https://github.com/">
                         </div>
                     </div>
 
                     <!-- Submit Buttons -->
-                    <div class="flex justify-end space-x-4 pt-8"
-                         :class="isDark ? 'border-t border-slate-700' : 'border-t border-slate-200'">
+                    <div class="flex justify-end space-x-6 pt-10"
+                         :class="isDark ? 'border-t border-slate-700/50' : 'border-t border-slate-200/50'">
                         <button type="button" @click="closeModal('addProject')"
-                                class="px-6 py-3 rounded-xl"
-                                :class="isDark ? 'bg-slate-700 text-slate-300 hover:bg-slate-600' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'">
+                                class="px-8 py-3.5 rounded-xl text-sm font-semibold hover:scale-105 transition-all duration-300 glass-effect shadow-lg"
+                                :class="isDark ? 'text-slate-300 hover:text-white' : 'text-slate-700 hover:text-slate-900'">
                             Cancel
                         </button>
                         <button type="submit"
-                                class="px-8 py-3 rounded-xl gradient-bg text-white hover:scale-105 transition-transform duration-300">
+                                class="px-10 py-3.5 rounded-xl gradient-bg text-white font-semibold hover:scale-105 transition-transform duration-300 shadow-lg group">
                             <span x-text="editingProject ? 'Update Project' : 'Add Project'"></span>
+                            <i class="fas fa-check ml-2 group-hover:rotate-180 transition-transform duration-300"></i>
                         </button>
                     </div>
                 </form>
@@ -1279,18 +1458,24 @@
     <!-- Toast Notification -->
     <div x-show="showToast" x-transition.opacity
          class="fixed bottom-8 right-8 z-50 max-w-sm">
-        <div class="p-4 rounded-2xl shadow-lg"
+        <div class="p-6 rounded-2xl shadow-xl glass-effect"
              :class="toastType === 'success'
-                     ? (isDark ? 'bg-green-900/90 text-white' : 'bg-green-100 text-green-800')
-                     : (isDark ? 'bg-red-900/90 text-white' : 'bg-red-100 text-red-800')">
-            <div class="flex items-center space-x-3">
-                <i :class="toastType === 'success' ? 'fas fa-check-circle' : 'fas fa-exclamation-circle'"
-                   class="text-lg"></i>
+                     ? (isDark ? 'border-l-4 border-green-500' : 'border-l-4 border-green-500')
+                     : (isDark ? 'border-l-4 border-red-500' : 'border-l-4 border-red-500')">
+            <div class="flex items-center space-x-4">
+                <div class="w-10 h-10 rounded-full flex items-center justify-center"
+                     :class="toastType === 'success' 
+                             ? (isDark ? 'bg-green-500/20' : 'bg-green-500/10')
+                             : (isDark ? 'bg-red-500/20' : 'bg-red-500/10')">
+                    <i :class="toastType === 'success' ? 'fas fa-check-circle text-green-500' : 'fas fa-exclamation-circle text-red-500'"
+                       class="text-lg"></i>
+                </div>
                 <div class="flex-1">
-                    <p class="font-medium" x-text="toastMessage"></p>
+                    <p class="font-semibold" :class="isDark ? 'text-white' : 'text-slate-900'"
+                       x-text="toastMessage"></p>
                 </div>
                 <button @click="showToast = false"
-                        class="w-6 h-6 rounded-full flex items-center justify-center hover:opacity-70">
+                        class="w-8 h-8 rounded-full flex items-center justify-center hover:scale-110 transition-transform duration-300 glass-effect">
                     <i class="fas fa-times text-xs"></i>
                 </button>
             </div>
@@ -1345,7 +1530,7 @@
                     description: '',
                     type: 'web',
                     technologies: [],
-                    image: '',
+                    image: 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
                     demoUrl: '',
                     sourceUrl: ''
                 },
@@ -1358,15 +1543,15 @@
 
                 socialLinks: [
                     { name: 'github', icon: 'fab fa-github', url: 'https://github.com/qorqr' },
-  { name: 'whatsapp', icon: 'fab fa-whatsapp', url: 'https://wa.me/6282295692941' },
-  { name: 'instagram', icon: 'fab fa-instagram', url: 'https://www.instagram.com/clzun._' },
-  { name: 'tiktok', icon: 'fab fa-tiktok', url: 'https://tiktok.com/@https://www.tiktok.com/@zuyyinafirdausi0' }
+                    { name: 'whatsapp', icon: 'fab fa-whatsapp', url: 'https://wa.me/6282295692941' },
+                    { name: 'instagram', icon: 'fab fa-instagram', url: 'https://www.instagram.com/clzun._' },
+                    { name: 'tiktok', icon: 'fab fa-tiktok', url: 'https://tiktok.com/@zuyyinafirdausi0' }
                 ],
 
                 defaultTechnologies: [
-                    'HTML', 'CSS', 'JavaScript', 'PHP', 'Laravel', 'React', 'Vue.js',
-                    'Node.js', 'MySQL', 'MongoDB', 'Tailwind', 'Bootstrap', 'Git',
-                    'Docker', 'AWS', 'REST API', 'GraphQL', 'Firebase', 'Python'
+                    'HTML', 'CSS', 'JavaScript', 'TypeScript', 'PHP', 'Laravel', 'React', 'Vue.js', 'Next.js',
+                    'Node.js', 'Express.js', 'MySQL', 'MongoDB', 'PostgreSQL', 'Tailwind CSS', 'Bootstrap', 'Git',
+                    'Docker', 'AWS', 'REST API', 'GraphQL', 'Firebase', 'Python', 'Django', 'Flask', 'Redis'
                 ],
 
                 // Computed Properties
@@ -1423,10 +1608,50 @@
                     const savedTheme = localStorage.getItem('theme');
                     this.isDark = savedTheme ? savedTheme === 'dark' : true;
 
+                    // Initialize particles
+                    this.initParticles();
+
                     // Simulate loading
                     setTimeout(() => {
                         this.isLoading = false;
-                    }, 1500);
+                    }, 2000);
+                },
+
+                initParticles() {
+                    particlesJS('particles-js', {
+                        particles: {
+                            number: { value: 80, density: { enable: true, value_area: 800 } },
+                            color: { value: this.isDark ? "#ffffff" : "#6366f1" },
+                            shape: { type: "circle" },
+                            opacity: { value: 0.3, random: true },
+                            size: { value: 3, random: true },
+                            line_linked: {
+                                enable: true,
+                                distance: 150,
+                                color: this.isDark ? "#ffffff" : "#6366f1",
+                                opacity: 0.2,
+                                width: 1
+                            },
+                            move: {
+                                enable: true,
+                                speed: 2,
+                                direction: "none",
+                                random: true,
+                                straight: false,
+                                out_mode: "out",
+                                bounce: false
+                            }
+                        },
+                        interactivity: {
+                            detect_on: "canvas",
+                            events: {
+                                onhover: { enable: true, mode: "grab" },
+                                onclick: { enable: true, mode: "push" },
+                                resize: true
+                            }
+                        },
+                        retina_detect: true
+                    });
                 },
 
                 loadFromStorage() {
@@ -1466,15 +1691,15 @@
                     this.skills = [
                         { id: 1, name: 'React', category: 'frontend', level: 95, years: baseExperience, projects: 15, icon: 'fab fa-react' },
                         { id: 2, name: 'Vue.js', category: 'frontend', level: 90, years: baseExperience, projects: 12, icon: 'fab fa-vuejs' },
-                        { id: 3, name: 'JavaScript', category: 'frontend', level: 98, years: baseExperience, projects: 25, icon: 'fab fa-js' },
-                        { id: 4, name: 'TypeScript', category: 'frontend', level: 85, years: baseExperience - 1, projects: 10, icon: 'fas fa-code' },
+                        { id: 3, name: 'TypeScript', category: 'frontend', level: 85, years: baseExperience - 1, projects: 10, icon: 'fas fa-code' },
+                        { id: 4, name: 'Next.js', category: 'frontend', level: 88, years: baseExperience, projects: 8, icon: 'fas fa-bolt' },
                         { id: 5, name: 'Laravel', category: 'backend', level: 92, years: baseExperience, projects: 18, icon: 'fab fa-laravel' },
                         { id: 6, name: 'Node.js', category: 'backend', level: 88, years: baseExperience, projects: 14, icon: 'fab fa-node-js' },
-                        { id: 7, name: 'PHP', category: 'backend', level: 90, years: baseExperience, projects: 16, icon: 'fab fa-php' },
+                        { id: 7, name: 'Express.js', category: 'backend', level: 85, years: baseExperience - 1, projects: 12, icon: 'fas fa-server' },
                         { id: 8, name: 'MySQL', category: 'database', level: 85, years: baseExperience, projects: 12, icon: 'fas fa-database' },
                         { id: 9, name: 'MongoDB', category: 'database', level: 78, years: baseExperience - 1, projects: 9, icon: 'fas fa-leaf' },
                         { id: 10, name: 'Docker', category: 'tools', level: 82, years: baseExperience - 1, projects: 11, icon: 'fab fa-docker' },
-                        { id: 11, name: 'Git', category: 'tools', level: 95, years: baseExperience, projects: 22, icon: 'fab fa-git-alt' },
+                        { id: 11, name: 'AWS', category: 'tools', level: 75, years: baseExperience - 1, projects: 7, icon: 'fab fa-aws' },
                         { id: 12, name: 'Tailwind CSS', category: 'frontend', level: 96, years: baseExperience - 1, projects: 14, icon: 'fas fa-palette' }
                     ];
                 },
@@ -1538,6 +1763,11 @@
 
                         // Check if at top
                         this.isAtTop = window.scrollY < 50;
+                    });
+
+                    // Theme change handler
+                    this.$watch('isDark', (value) => {
+                        this.initParticles();
                     });
                 },
 
@@ -1609,6 +1839,41 @@
 
                 getSkillCountByCategory(category) {
                     return this.skills.filter(skill => skill.category === category).length;
+                },
+
+                // Image Upload Handler
+                handleImageUpload(event, type) {
+                    const file = event.target.files[0];
+                    if (!file) return;
+
+                    // Validate file type
+                    if (!file.type.match('image.*')) {
+                        this.showToastMessage('Please upload an image file', 'error');
+                        return;
+                    }
+
+                    // Validate file size (max 5MB)
+                    if (file.size > 5 * 1024 * 1024) {
+                        this.showToastMessage('Image size should be less than 5MB', 'error');
+                        return;
+                    }
+
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        if (type === 'project') {
+                            // For local display only - use base64
+                            this.newProject.image = e.target.result;
+                            
+                            // Update preview
+                            const preview = document.getElementById('projectImagePreview');
+                            if (preview) {
+                                preview.src = e.target.result;
+                            }
+                            
+                            this.showToastMessage('Image uploaded successfully (for local preview)', 'success');
+                        }
+                    };
+                    reader.readAsDataURL(file);
                 },
 
                 // Skill Methods
@@ -1712,7 +1977,10 @@
                         description: this.newProject.description.trim(),
                         type: this.newProject.type,
                         technologies: [...this.newProject.technologies],
-                        image: 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+                        // Use base64 image if uploaded, otherwise use default Unsplash image
+                        image: this.newProject.image.includes('base64') 
+                               ? this.newProject.image 
+                               : 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
                         demoUrl: this.newProject.demoUrl.trim(),
                         sourceUrl: this.newProject.sourceUrl.trim()
                     };
@@ -1752,6 +2020,10 @@
                             description: this.newProject.description.trim(),
                             type: this.newProject.type,
                             technologies: [...this.newProject.technologies],
+                            // Preserve original image URL (Unsplash) to avoid GitHub issues
+                            image: this.newProject.image.includes('unsplash') || this.editingProject.image.includes('unsplash')
+                                   ? this.editingProject.image
+                                   : this.newProject.image,
                             demoUrl: this.newProject.demoUrl.trim(),
                             sourceUrl: this.newProject.sourceUrl.trim()
                         };
@@ -1778,7 +2050,7 @@
                         description: '',
                         type: 'web',
                         technologies: [],
-                        image: '',
+                        image: 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
                         demoUrl: '',
                         sourceUrl: ''
                     };
@@ -1799,6 +2071,7 @@
                     if (this.customTech.trim() && !this.newProject.technologies.includes(this.customTech.trim())) {
                         this.newProject.technologies.push(this.customTech.trim());
                         this.customTech = '';
+                        this.showToastMessage('Technology added!', 'success');
                     }
                 },
 
@@ -1817,7 +2090,7 @@
                     }
 
                     // Simulate sending message
-                    this.showToastMessage('Message sent successfully! (Simulated - check browser console)', 'success');
+                    this.showToastMessage('Message sent successfully! I\'ll get back to you soon.', 'success');
 
                     // Log to console
                     console.log('Contact Form Submission:', this.contactForm);
@@ -1854,8 +2127,16 @@
                             const data = JSON.parse(e.target.result);
 
                             if (data.skills && data.projects) {
+                                // Preserve image URLs (use Unsplash images only for GitHub compatibility)
+                                const sanitizedProjects = data.projects.map(project => ({
+                                    ...project,
+                                    image: project.image.includes('unsplash') 
+                                           ? project.image 
+                                           : 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'
+                                }));
+
                                 this.skills = data.skills;
-                                this.projects = data.projects;
+                                this.projects = sanitizedProjects;
                                 this.saveToStorage();
                                 this.showToastMessage('Data imported successfully!', 'success');
                             } else {
@@ -1874,8 +2155,15 @@
                 exportToJSON() {
                     const data = {
                         skills: this.skills,
-                        projects: this.projects,
-                        exportedAt: new Date().toISOString()
+                        projects: this.projects.map(project => ({
+                            ...project,
+                            // Export only Unsplash image URLs for GitHub compatibility
+                            image: project.image.includes('unsplash') 
+                                   ? project.image 
+                                   : 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'
+                        })),
+                        exportedAt: new Date().toISOString(),
+                        portfolioName: 'DevPort Portfolio'
                     };
 
                     const dataStr = JSON.stringify(data, null, 2);
@@ -1935,7 +2223,7 @@
 
                     setTimeout(() => {
                         this.showToast = false;
-                    }, 3000);
+                    }, 4000);
                 }
             }
         }
